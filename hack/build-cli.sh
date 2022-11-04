@@ -4,6 +4,8 @@
 # VCLUSTER_BUILD_PLATFORMS="linux" VCLUSTER_BUILD_ARCHS="amd64" ./hack/build-all.bash
 # can be called to build only for linux-amd64
 
+set -u
+
 set -e
 
 export GO111MODULE=on
@@ -45,7 +47,15 @@ mkdir -p "${VCLUSTER_ROOT}/release"
 cp -a "${VCLUSTER_ROOT}/assets/." "${VCLUSTER_ROOT}/release/"
 
 # generate vcluster-images.txt
+
 go run -mod vendor "${VCLUSTER_ROOT}/hack/assets/main.go" ${RELEASE_VERSION} > "${VCLUSTER_ROOT}/release/vcluster-images.txt"
+
+
+
+helm package --version="$RELEASE_VERSION" charts/k3s/
+helm package --version="$RELEASE_VERSION" charts/k0s/
+helm package --version="$RELEASE_VERSION" charts/k8s/
+helm package --version="$RELEASE_VERSION" charts/eks/
 
 for OS in ${VCLUSTER_BUILD_PLATFORMS[@]}; do
   for ARCH in ${VCLUSTER_BUILD_ARCHS[@]}; do
