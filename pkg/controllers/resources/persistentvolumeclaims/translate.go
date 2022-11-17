@@ -131,6 +131,13 @@ func (s *persistentVolumeClaimSyncer) translateUpdateBackwards(pObj, vObj *corev
 		if updated.Annotations[storageProvisionerAnnotation] != pObj.Annotations[storageProvisionerAnnotation] {
 			updated.Annotations[storageProvisionerAnnotation] = pObj.Annotations[storageProvisionerAnnotation]
 		}
+
+		// respect vObj storageClassName unless the PV is bound, in which case respect the host storageclassname
+		// see: https://github.com/kubernetes/enhancements/tree/master/keps/sig-storage/3333-reconcile-default-storage-class
+		if pObj.Spec.StorageClassName != nil && pObj.Status.Phase == corev1.ClaimBound && vObj.Spec.StorageClassName != pObj.Spec.StorageClassName {
+			updated = newIfNil(updated, vObj)
+			updated.Spec.StorageClassName = pObj.Spec.StorageClassName
+		}
 	}
 
 	return updated
