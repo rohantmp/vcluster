@@ -104,13 +104,25 @@ type VirtualClusterInstanceProject struct {
 	Project        *managementv1.Project
 }
 
-func NewClientFromConfig(ctx context.Context, config *config.CLI) (Client, error) {
+func InitClientFromConfig(ctx context.Context, config *config.CLI) (Client, error) {
 	c := &client{
 		config: config,
 	}
 
 	if err := c.RefreshSelf(ctx); err != nil {
 		return nil, err
+	}
+
+	selfOnce.Do(func() {
+		Self = c.Self()
+	})
+
+	return c, nil
+}
+
+func NewClientFromConfig(ctx context.Context, config *config.CLI) (Client, error) {
+	c := &client{
+		config: config,
 	}
 
 	selfOnce.Do(func() {

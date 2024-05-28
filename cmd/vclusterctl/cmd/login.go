@@ -152,7 +152,7 @@ func (cmd *LoginCmd) Run(ctx context.Context, args []string) error {
 
 func (cmd *LoginCmd) printLoginDetails(ctx context.Context) error {
 	cfg := cmd.LoadedConfig(cmd.Log)
-	platformClient, err := platform.NewClientFromConfig(ctx, cfg)
+	platformClient, err := platform.InitClientFromConfig(ctx, cfg)
 	if err != nil {
 		return err
 	}
@@ -176,7 +176,7 @@ func (cmd *LoginCmd) printLoginDetails(ctx context.Context) error {
 }
 
 func dockerLogin(ctx context.Context, config *config.CLI, log log.Logger) error {
-	platformClient, err := platform.NewClientFromConfig(ctx, config)
+	platformClient, err := platform.InitClientFromConfig(ctx, config)
 	if err != nil {
 		return err
 	}
