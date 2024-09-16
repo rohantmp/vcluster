@@ -1325,10 +1325,10 @@ type ControlPlaneHeadlessService struct {
 }
 
 type ExternalEtcdPersistence struct {
-	// VolumeClaim can be used to configure the persistent volume claim.
+	// VolumeClaim can be used to configure the persistent volume claim for the external etcd StatefulSet.
 	VolumeClaim ExternalEtcdPersistenceVolumeClaim `json:"volumeClaim,omitempty"`
 
-	// VolumeClaimTemplates defines the volumeClaimTemplates for the statefulSet
+	// VolumeClaimTemplates will override the default claimTemplate created for the etcd StatefulSet for advanced customization
 	VolumeClaimTemplates []map[string]interface{} `json:"volumeClaimTemplates,omitempty"`
 
 	// AddVolumes defines extra volumes for the pod

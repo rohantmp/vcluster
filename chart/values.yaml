@@ -361,7 +361,7 @@ controlPlane:
             containerSecurityContext: {}
           # Persistence options for the etcd pods.
           persistence:
-            # VolumeClaim can be used to configure the persistent volume claim.
+            # VolumeClaim can be used to configure the persistent volume claim for the external etcd StatefulSet.
             volumeClaim:
               # Enabled enables deploying a persistent volume claim.
               enabled: true
@@ -373,7 +373,7 @@ controlPlane:
               storageClass: ""
               # AccessModes are the persistent volume claim access modes.
               accessModes: ["ReadWriteOnce"]
-            # VolumeClaimTemplates defines the volumeClaimTemplates for the statefulSet
+            # VolumeClaimTemplates will override the default claimTemplate created for the etcd StatefulSet for advanced customization
             volumeClaimTemplates: []
             # AddVolumes defines extra volumes for the pod
             addVolumes: []

@@ -16,6 +16,11 @@ volumeClaimTemplates:
 volumeClaimTemplates:
 - metadata:
     name: data
+ {{- $annotations := merge dict .Values.controlPlane.statefulSet.annotations .Values.controlPlane.advanced.globalMetadata.annotations }}
+{{- if $annotations }}
+    annotations:
+{{ toYaml $annotations | indent 6 }}
+{{- end }}
   spec:
     accessModes: {{ .Values.controlPlane.statefulSet.persistence.volumeClaim.accessModes }}
     {{- if .Values.controlPlane.statefulSet.persistence.volumeClaim.storageClass }}

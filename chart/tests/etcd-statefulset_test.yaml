@@ -149,6 +149,10 @@ tests:
       namespace: my-namespace
     set:
       controlPlane:
+        advanced:
+          globalMetadata:
+            annotations:
+              globalKey: globalValue
         backingStore:
           etcd:
             deploy:
@@ -157,7 +161,7 @@ tests:
                 highAvailability:
                   replicas: 3
                 annotations:
-                  test: test
+                  statefulSetKey: statefulSetValue
         distro:
           k8s:
             enabled: true
@@ -171,8 +175,17 @@ tests:
           path: metadata.namespace
           value: my-namespace
       - equal:
-          path: metadata.annotations.test
-          value: test
+          path: metadata.annotations.statefulSetKey
+          value: statefulSetValue
+      - equal:
+          path: metadata.annotations.globalKey
+          value: globalValue
+      - equal:
+          path: spec.volumeClaimTemplates[0].metadata.annotations.globalKey
+          value: globalValue
+      - equal:
+          path: spec.volumeClaimTemplates[0].metadata.annotations.statefulSetKey
+          value: statefulSetValue
       - equal:
           path: spec.replicas
           value: 3

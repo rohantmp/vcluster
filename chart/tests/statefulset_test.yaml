@@ -45,6 +45,25 @@ tests:
           path: spec.template.spec.containers[0].image
           value: ghcr.io/my-repo:custom-tag
 
+  - it: control plane annotations
+    set:
+      controlPlane:
+        statefulSet:
+          annotations:
+            statefulSetKey: statefulSetValue
+        advanced:
+          globalMetadata:
+            annotations:
+              globalKey: globalValue
+    asserts:
+      - equal:
+          path: .spec.volumeClaimTemplates[0].metadata.annotations.globalKey
+          value: globalValue
+      - equal:
+          path: .spec.volumeClaimTemplates[0].metadata.annotations.statefulSetKey
+          value: statefulSetValue
+
+
   - it: custom init container
     set:
       controlPlane:

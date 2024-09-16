@@ -2,6 +2,7 @@
 {{- if or .Values.controlPlane.backingStore.etcd.deploy.enabled (include "vcluster.etcd.embedded.migrate" .) }}
 {{- if .Values.controlPlane.backingStore.etcd.deploy.statefulSet.enabled }}
 {{- $externalEtcd := .Values.controlPlane.backingStore.etcd.deploy.statefulSet }}
+{{- $annotations := merge dict .Values.controlPlane.advanced.globalMetadata.annotations $externalEtcd.annotations }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -15,7 +16,6 @@ metadata:
 {{- if $externalEtcd.labels }}
 {{ toYaml $externalEtcd.labels | indent 4 }}
 {{- end }}
-  {{- $annotations := merge dict .Values.controlPlane.advanced.globalMetadata.annotations $externalEtcd.annotations }}
   {{- if $annotations }}
   annotations:
 {{ toYaml $annotations | indent 4 }}
@@ -34,13 +34,17 @@ spec:
     matchLabels:
       app: vcluster-etcd
       release: {{ .Release.Name }}
-  {{- if $externalEtcd.persistence.volumeClaimTemplates }}
+{{- if $externalEtcd.persistence.volumeClaimTemplates }}
   volumeClaimTemplates:
 {{ toYaml $externalEtcd.persistence.volumeClaimTemplates | indent 4 }}
   {{- else if $externalEtcd.persistence.volumeClaim.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: data
+{{- if $annotations }}
+        annotations:
+{{ toYaml $annotations | indent 10 }}
+{{- end}}
       spec:
         accessModes: {{ $externalEtcd.persistence.volumeClaim.accessModes }}
         {{- if $externalEtcd.persistence.volumeClaim.storageClass }}

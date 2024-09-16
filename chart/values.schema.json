@@ -1551,14 +1551,14 @@
       "properties": {
         "volumeClaim": {
           "$ref": "#/$defs/ExternalEtcdPersistenceVolumeClaim",
-          "description": "VolumeClaim can be used to configure the persistent volume claim."
+          "description": "VolumeClaim can be used to configure the persistent volume claim for the external etcd StatefulSet."
         },
         "volumeClaimTemplates": {
           "items": {
             "type": "object"
           },
           "type": "array",
-          "description": "VolumeClaimTemplates defines the volumeClaimTemplates for the statefulSet"
+          "description": "VolumeClaimTemplates will override the default claimTemplate created for the etcd StatefulSet for advanced customization"
         },
         "addVolumes": {
           "items": {
