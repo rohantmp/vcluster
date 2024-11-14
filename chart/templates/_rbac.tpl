@@ -39,6 +39,7 @@
     .Values.sync.fromHost.customResources
     .Values.integrations.kubeVirt.enabled
     .Values.integrations.externalSecrets.enabled
+    .Values.integrations.certManager.enabled
     (and .Values.integrations.metricsServer.enabled .Values.integrations.metricsServer.nodes)
     .Values.experimental.multiNamespaceMode.enabled -}}
 {{- true -}}
